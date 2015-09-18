@@ -6,13 +6,11 @@
   hhaW4oKnppcChzWy0yOjotMl0sIHNbOjotMl0pKSk=
 \*======================================================================*/
 
-if (/*NAMESPACE == null || */ // NAMESPACE is not declared and hence compile time error will occur
-		// To avoid NAMESPACE error, we can define as 'var NAMESPACE;' or we can remove null sanity check in the if clause
-        typeof (NAMESPACE) == 'undefined') {
+if (typeof (NAMESPACE) == 'undefined' ||  
+		NAMESPACE == null) {
     NAMESPACE = {};
 
-    var id = function (id) {
-        var _all_ids = new Array();		// The array literal can be defined with [] is preferable
+    var id = function (id, all_ids) {
         var persona = {};
         var _id = id;
 
@@ -24,10 +22,11 @@ if (/*NAMESPACE == null || */ // NAMESPACE is not declared and hence compile tim
         var _closed = false;
         
         var close = function () {
-            if(_all_ids[getId()] !== undefined) {
-            	_all_ids.splice(getId(), 1);		// delete _all_ids[getId()]; will set the specified element with 'undefined'
+            if(all_ids[getId()] !== undefined) {
+            	all_ids.splice(getId(), 1);		// delete _all_ids[getId()]; will set the specified element with 'undefined'
+				this._closed = true;
             }
-            this._closed = true;
+			return this._closed;
         }
         
         persona.close = close();
@@ -35,5 +34,5 @@ if (/*NAMESPACE == null || */ // NAMESPACE is not declared and hence compile tim
         return persona;
     }
 
-    NAMESPACE['id'] = id(0);		// getting the persona object
+    NAMESPACE['id'] = id(0, new Array());		// getting the persona object
 }
